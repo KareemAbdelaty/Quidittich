@@ -7,6 +7,8 @@ public class Main : MonoBehaviour
     public int Score = 0;
     public int TeamSize= 20;
     public int GoalLimit = 100;
+    public Vector3 griffindorStartpostion;
+    public Vector3 slythrinStartpostion;
     // Start is called before the first frame update
     void Start()
     {
