@@ -25,6 +25,8 @@ public class Main : MonoBehaviour
     {
         //create floor
         land = Instantiate(land);
+        Rigidbody r = GameObject.FindGameObjectWithTag("Land").GetComponent<Rigidbody>();
+        r.useGravity = false;
         //create snitch
         Instantiate(snitch);
         SnitchBehaviourScript snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();

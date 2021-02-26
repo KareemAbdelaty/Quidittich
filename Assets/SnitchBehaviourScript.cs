@@ -47,15 +47,21 @@ public class SnitchBehaviourScript : MonoBehaviour
         Vector3 vec2 = new Vector3(randomx, randomy, randomz);
         vec = (vec2 - GameObject.FindGameObjectWithTag("snitch").transform.position).normalized;
         opposite = new Vector3(-vec.x, -vec.y, -vec.z);
-        rb.AddForce(vec * thrust);
+        rb.AddForce(vec * thrust, ForceMode.Force);
     }
     public void removeForce()
     {
-        rb.AddForce(opposite * thrust);
+        rb.AddForce(opposite * thrust, ForceMode.Force);
     }
 
-    public void OnCollisionEnter()
+    public void OnCollisionEnter(Collision collision)
     {
-
+        if(collision.gameObject.tag == "Land")
+        {
+            Debug.Log(1);
+            generateNewCoordinates();
+            removeForce();
+            generateForce();
+        }
     }
 }

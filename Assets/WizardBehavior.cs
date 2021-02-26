@@ -39,4 +39,12 @@ public class WizardBehavior : MonoBehaviour
     {
 
     }
+    void onKnockOut()
+    {
+
+    }
+    void onWakeup()
+    {
+
+    }
 }
