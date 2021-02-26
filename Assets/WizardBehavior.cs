@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class WizardBehavior : MonoBehaviour
 {
-    public const string grifColor = "red";
-    public const string slythColor = "green";
+    public int team;
     public int aggresiveness;
     public int maxExhaustion;
     public int maxVelocity;
     public int weight;
     public int currentExhaustion;
+    public int mindControl;
+    public int invlunerability;
+    public int teamRage; //when dead distribute power
+    public int rechargeRate;
+    public bool unconcious;
+
     // Start is called before the first frame update
     void Start()
     {
