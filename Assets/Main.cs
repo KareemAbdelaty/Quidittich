@@ -9,14 +9,19 @@ public class Main : MonoBehaviour
     public int GoalLimit = 100;
     public Vector3 griffindorStartpostion;
     public Vector3 slythrinStartpostion;
+    public GameObject land;
+    public GameObject wizard;
+    public GameObject snitch;
+    public GameObject[] wizards;
     // Start is called before the first frame update
     void Start()
     {
         //create floor
-
+        Instantiate(land);
         //create snitch
-        
+        Instantiate(snitch);
         //create wizards
+        Instantiate(wizard);
     }
 
     // Update is called once per frame

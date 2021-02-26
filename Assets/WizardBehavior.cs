@@ -32,4 +32,8 @@ public class WizardBehavior : MonoBehaviour
     {
 
     }
+    void OnCollisionEnter(Collision)
+    {
+
+    }
 }

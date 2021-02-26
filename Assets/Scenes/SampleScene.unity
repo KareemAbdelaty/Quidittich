@@ -250,6 +250,10 @@ MonoBehaviour:
   GoalLimit: 100
   griffindorStartpostion: {x: 0, y: 0, z: 0}
   slythrinStartpostion: {x: 0, y: 0, z: 0}
+  land: {fileID: 8442766968148502277, guid: 33e642c657e54b44eb8b5fb8dc9f7b04, type: 3}
+  wizard: {fileID: 3274042741155190465, guid: 252b15d09387bd945b19e9b6e38b9b63, type: 3}
+  snitch: {fileID: 3801550475772501825, guid: 774381dae572ec642ba5007673c87967, type: 3}
+  wizards: []
 --- !u!4 &719570928
 Transform:
   m_ObjectHideFlags: 0

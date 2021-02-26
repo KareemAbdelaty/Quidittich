@@ -30,4 +30,8 @@ public class SnitchBehaviourScript : MonoBehaviour
     {
 
     }
+    void OnCollisionEnter(Collision)
+    {
+
+    }
 }
