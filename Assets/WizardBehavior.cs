@@ -15,6 +15,9 @@ public class WizardBehavior : MonoBehaviour
     public int teamRage; //when dead distribute power
     public int rechargeRate;
     public bool unconcious;
+    public int xLimit;
+    public int yLimit;
+    public int zLimit;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +33,9 @@ public class WizardBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-
+           
     }
-    void OnCollisionEnter(Collision)
+    void OnCollisionEnter()
     {
 
     }

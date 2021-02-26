@@ -13,13 +13,30 @@ public class Main : MonoBehaviour
     public GameObject wizard;
     public GameObject snitch;
     public GameObject[] wizards;
+    public float snitchThrust;
+    public int xmax;
+    public int xmin;
+    public int ymax;
+    public int ymin;
+    public int zmax;
+    public int zmin;
     // Start is called before the first frame update
     void Start()
     {
         //create floor
-        Instantiate(land);
+        land = Instantiate(land);
         //create snitch
         Instantiate(snitch);
+        SnitchBehaviourScript snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();
+        snitchScript.rb = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
+        snitchScript.xmax = xmax;
+        snitchScript.xmin = xmin;
+        snitchScript.ymax = ymax;
+        snitchScript.ymin = ymin;
+        snitchScript.zmax = zmax;
+        snitchScript.zmin = zmin;
+        snitchScript.generateNewCoordinates();
+        snitchScript.thrust = snitchThrust;
         //create wizards
         Instantiate(wizard);
     }

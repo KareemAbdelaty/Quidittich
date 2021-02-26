@@ -254,6 +254,13 @@ MonoBehaviour:
   wizard: {fileID: 3274042741155190465, guid: 252b15d09387bd945b19e9b6e38b9b63, type: 3}
   snitch: {fileID: 3801550475772501825, guid: 774381dae572ec642ba5007673c87967, type: 3}
   wizards: []
+  snitchThrust: 10
+  xmax: 0
+  xmin: 100
+  ymax: 0
+  ymin: 100
+  zmax: 0
+  zmin: 100
 --- !u!4 &719570928
 Transform:
   m_ObjectHideFlags: 0
