@@ -27,4 +27,9 @@ public class WizardBehavior : MonoBehaviour
     {
         
     }
+
+    void FixedUpdate()
+    {
+
+    }
 }
