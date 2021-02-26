@@ -16,6 +16,8 @@ public class SnitchBehaviourScript : MonoBehaviour
     public int zmin;
     public Rigidbody rb;
     public float thrust;
+    Vector3 vec;
+    Vector3 opposite;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,22 +29,29 @@ public class SnitchBehaviourScript : MonoBehaviour
     }
     void FixedUpdate() { 
         Vector3 currentpos = GameObject.FindGameObjectWithTag("snitch").transform.position;
-        if (randomx == currentpos.x && randomy == currentpos.y && randomz == currentpos.z)
+        if ((currentpos.x - 5 <= randomx)&&(randomx <= currentpos.x + 5)&& (currentpos.y - 5 <= randomy) && (randomy <= currentpos.y+ 5)&&( currentpos.z - 5 <= randomz)&&(randomx <= currentpos.x + 5))
         {
             generateNewCoordinates();
+            removeForce();
+            generateForce();
         }
-        generateForce();
     }
     public void generateNewCoordinates()
     {
-        randomx = Random.Range(xmin, xmax);
-        randomy = Random.Range(ymin, ymax);
-        randomz = Random.Range(zmin, zmax);
+        randomx = Random.Range(-100, 100);
+        randomy = Random.Range(-100, 100);
+        randomz = Random.Range(-100, 100);
     }
     public void generateForce()
     {
-        Vector3 vec = new Vector3(randomx, randomy, randomz);
-        rb.AddRelativeForce(vec * thrust);
+        Vector3 vec2 = new Vector3(randomx, randomy, randomz);
+        vec = (vec2 - GameObject.FindGameObjectWithTag("snitch").transform.position).normalized;
+        opposite = new Vector3(-vec.x, -vec.y, -vec.z);
+        rb.AddForce(vec * thrust);
+    }
+    public void removeForce()
+    {
+        rb.AddForce(opposite * thrust);
     }
 
     public void OnCollisionEnter()

@@ -29,6 +29,7 @@ public class Main : MonoBehaviour
         Instantiate(snitch);
         SnitchBehaviourScript snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();
         snitchScript.rb = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
+        snitchScript.rb.useGravity = false;
         snitchScript.xmax = xmax;
         snitchScript.xmin = xmin;
         snitchScript.ymax = ymax;
@@ -37,6 +38,7 @@ public class Main : MonoBehaviour
         snitchScript.zmin = zmin;
         snitchScript.generateNewCoordinates();
         snitchScript.thrust = snitchThrust;
+        snitchScript.generateForce();
         //create wizards
         Instantiate(wizard);
     }
