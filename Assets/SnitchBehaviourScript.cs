@@ -16,11 +16,13 @@ public class SnitchBehaviourScript : MonoBehaviour
     public int zmin;
     public Rigidbody rb;
     public float thrust;
-    Vector3 vec;
-    Vector3 opposite;
+    private bool upward; 
+    private Vector3 vec;
+    private Vector3 opposite;
     // Start is called before the first frame update
     void Start()
     {
+        upward = false;
     }
 
     // Update is called once per frame
@@ -35,12 +37,19 @@ public class SnitchBehaviourScript : MonoBehaviour
             removeForce();
             generateForce();
         }
+        if (upward)
+        {
+            Debug.Log(456);
+            Vector3 vec3 = new Vector3(0, -50, 0);
+            rb.AddForce(vec3, ForceMode.Force);
+            upward = false ;
+        }
     }
     public void generateNewCoordinates()
     {
-        randomx = Random.Range(-100, 100);
-        randomy = Random.Range(-100, 100);
-        randomz = Random.Range(-100, 100);
+        randomx = Random.Range(xmin, xmax);
+        randomy = Random.Range(ymin, ymax);
+        randomz = Random.Range(zmin, zmax);
     }
     public void generateForce()
     {
@@ -58,10 +67,10 @@ public class SnitchBehaviourScript : MonoBehaviour
     {
         if(collision.gameObject.tag == "Land")
         {
-            Debug.Log(1);
-            generateNewCoordinates();
-            removeForce();
-            generateForce();
+            Debug.Log(123);
+            Vector3 vec3 = new Vector3(0, 50, 0);
+            rb.AddForce(vec3, ForceMode.Force);
+            upward = true;
         }
     }
 }

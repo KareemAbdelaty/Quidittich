@@ -20,24 +20,5 @@ public class CameraController : MonoBehaviour
         Vec.x += Input.GetAxis("Horizontal") * Time.deltaTime * 20;
         Vec.z += Input.GetAxis("Vertical") * Time.deltaTime * 20;
         transform.localPosition = Vec;
-        if (Input.GetKey(KeyCode.W))
-        {
-            this.transform.Rotate(Vector3.left, -5);
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            this.transform.Rotate(Vector3.left, 5);
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            this.transform.Rotate(Vector3.up, -5);
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            this.transform.Rotate(Vector3.up, 5);
-        }
     }
 }

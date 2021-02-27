@@ -23,6 +23,13 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        xmin = -500;
+        xmax = 500;
+        ymin = 0;
+        ymax = 1000;
+        zmin = -500;
+        zmax = 500;
+
         //create floor
         land = Instantiate(land);
         Rigidbody r = GameObject.FindGameObjectWithTag("Land").GetComponent<Rigidbody>();
