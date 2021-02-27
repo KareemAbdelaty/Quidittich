@@ -40,18 +40,10 @@ public class SnitchBehaviourScript : MonoBehaviour
     }
     void FixedUpdate() {
         Vector3 p = transform.position;
-        if (p.x < xmin || p.x > xmax)
+        if (p.y < 0)
         {
-            p.x = 50;
-        }
-        if (p.y < ymin || p.y > ymax)
-        {
-            p.y = 1000;
-            Debug.Log("here");
-        }
-        if (p.z < zmin || p.z > zmax)
-        {
-            p.z = 50;
+            p.y = 200;
+
         }
         Vector3 currentpos = transform.position;
         if ((currentpos.x - 10 <= randomx)&&(randomx <= currentpos.x + 10)&& (currentpos.y - 10 <= randomy) && (randomy <= currentpos.y+ 10)&&( currentpos.z - 10<= randomz)&&(randomx <= currentpos.x + 10))

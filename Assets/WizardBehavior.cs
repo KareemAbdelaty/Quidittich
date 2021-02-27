@@ -50,18 +50,11 @@ public class WizardBehavior : MonoBehaviour
     void FixedUpdate()
     {
         Vector3 p = transform.position;
-        if(p.x < xmin || p.x > xmax)
-        {
-            p.x = 50;
-        }
-        if (p.y < ymin || p.y > ymax)
+        if (p.y < 0)
         {
             p.y = 200;
         }
-        if (p.z < zmin || p.z > zmax)
-        {
-            p.z = 50;
-        }
+
         transform.position = p;
         if (!unconscious)
         {
@@ -93,7 +86,6 @@ public class WizardBehavior : MonoBehaviour
     }
     void onKnockOut()
     {
-        Debug.Log(team + " wizard " + id + " is knocked out");
         rb.velocity = Vector3.zero;
         Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
         System.Random rng = new System.Random();
@@ -137,11 +129,10 @@ public class WizardBehavior : MonoBehaviour
                 }
             }
         }
-        n = rng.Next(0, 100);
-        if (n < mindcontrol)
+        WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
+        if (w.mindcontrol < mindcontrol)
         {
             m.mindcontrolls++;
-            WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
             mindControlling = true;
             Debug.Log(w.team + " wizard " + id + "'s mind has been hexed");
             if (w.team == "slythrin")
@@ -222,9 +213,9 @@ public class WizardBehavior : MonoBehaviour
                 MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
                 me.material = Resources.Load("WizardGreen", typeof(Material)) as Material;
             }
-            knockOutby = null;
+            
         }
-
+        knockOutby = null;
     }
     IEnumerator wakeup()
     {
@@ -235,7 +226,7 @@ public class WizardBehavior : MonoBehaviour
     void recharging()
     {
         timer++;
-        if (timer == 10000)
+        if (timer == 1000)
         {
             currentExhaustion--;
             timer = 0;
@@ -244,7 +235,7 @@ public class WizardBehavior : MonoBehaviour
     public void initForce()
     {
         timer++;
-        if (timer == 10000)
+        if (timer == 1000)
         {
             currentExhaustion++;
             timer = 0;
@@ -252,7 +243,7 @@ public class WizardBehavior : MonoBehaviour
         Vector3 snitch = GameObject.FindGameObjectWithTag("snitch").transform.position;
         Vector3 vec2 = new Vector3(snitch.x, snitch.y, snitch.z);
         vec = (vec2 - transform.position).normalized;
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 200);
         Vector3 rep = Vector3.zero;
         for (int i = 0; i < hitColliders.Length; i++)
         {
@@ -266,9 +257,10 @@ public class WizardBehavior : MonoBehaviour
 
 
         }
-        //   rep = rep * repulsion;
+        rep = rep * repulsion;
         vec = vec + rep;
-        rb.AddForce(vec * thrust, ForceMode.Force);
+        vec = Vector3.ClampMagnitude(vec, maxVelocity);
+        rb.AddForce(vec, ForceMode.Force);
         opposite = -vec;
         float temp = rb.velocity.magnitude;
 
@@ -276,7 +268,7 @@ public class WizardBehavior : MonoBehaviour
     public void generateForce()
     {
         timer++;
-        if(timer == 10000)
+        if(timer == 1000)
         {
             currentExhaustion++;
             timer = 0;
@@ -284,7 +276,7 @@ public class WizardBehavior : MonoBehaviour
         Vector3 snitch = GameObject.FindGameObjectWithTag("snitch").transform.position;
         Vector3 vec2 = new Vector3(snitch.x, snitch.y, snitch.z);
         vec = (vec2 - transform.position).normalized;
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 200);
         Vector3 rep = Vector3.zero;
         for(int i = 0; i< hitColliders.Length; i++)
         {
@@ -298,12 +290,12 @@ public class WizardBehavior : MonoBehaviour
             
 
         }
-     //   rep = rep * repulsion;
+        rep = rep * repulsion;
         vec = vec + rep;
+        vec = Vector3.ClampMagnitude(vec, maxVelocity);
         rb.AddForce(opposite * thrust, ForceMode.Force);
         rb.AddForce(vec * thrust, ForceMode.Force);
         opposite = -vec;
-        float temp = rb.velocity.magnitude;
         
 
     }
@@ -311,15 +303,16 @@ public class WizardBehavior : MonoBehaviour
     {
         if (collision.gameObject.tag == "Land")
         {
+                Debug.Log(team + " wizard " + id + " has been knocked out by hitting the ground");
                 unconscious = true;
                 if (team == "griffindor")
                 {
-                    transform.position = new Vector3(Random.Range(xmin, xmax), 500, 490);
+                    transform.position = new Vector3(Random.Range(xmin, xmax), 1000, 490);
                     StartCoroutine(wakeup());
                 }
                 else
                 {
-                    transform.position = new Vector3(Random.Range(xmin, xmax), 500, -490);
+                    transform.position = new Vector3(Random.Range(xmin, xmax), 1000, -490);
                     StartCoroutine(wakeup());
                 }
             
@@ -334,11 +327,13 @@ public class WizardBehavior : MonoBehaviour
                 double player2 = w.aggresiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (w.currentExhaustion / w.maxExhaustion));
                 if (player1 <= player2)
                 {
-                    knockOutby = collision.gameObject; ;
+                    knockOutby = collision.gameObject;
+                    Debug.Log(team + " wizard " + id + " has been knocked out by " + w.team + " " + w.id);
                     onKnockOut();
                 }
                 else
                 {
+                    Debug.Log(w.team + " wizard " + w.id + " has been knocked out by " + team + " " + id);
                     w.onKnockOut();
                     w.knockOutby = gameObject;
                 }
@@ -350,12 +345,12 @@ public class WizardBehavior : MonoBehaviour
                 double player2 = w.aggresiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (w.currentExhaustion / w.maxExhaustion));
                  if (player1 <= player2 && rng.Next(0, 100) > 95)
                  {
-                    Debug.Log("Friendly fire at " +team);
+                    Debug.Log("Friendly fire at " +team + ", " + w.id + " has knocked out " + id );
                     onKnockOut();
                   }
                  else if (rng.Next(0, 100) > 95)
                  {
-                    Debug.Log("Friendly fire at " +team);
+                    Debug.Log("Friendly fire at " + team + ", " + id + " has knocked out " + w.id);
                     w.onKnockOut();
                   }
                 }

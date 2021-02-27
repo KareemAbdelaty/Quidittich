@@ -260,11 +260,11 @@ MonoBehaviour:
   wizardThrust: 60
   xmax: 3000
   xmin: -3000
-  ymax: 3000
+  ymax: 6000
   ymin: 10
   zmax: 3000
   zmin: -3000
-  repulsion: 30
+  repulsion: 1
   knockouts: 0
   powershares: 0
   mindcontrolls: 0
@@ -336,7 +336,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 4000
+  far clip plane: 2500
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -363,7 +363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1000, y: 500, z: -2000}
+  m_LocalPosition: {x: -1000, y: 700, z: -1500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
