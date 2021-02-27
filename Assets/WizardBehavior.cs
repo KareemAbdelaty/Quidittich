@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class WizardBehavior : MonoBehaviour
 {
-    public int team;
+    public string team;
     public int aggresiveness;
     public int maxExhaustion;
     public int maxVelocity;
     public int weight;
     public int currentExhaustion;
     public int mindControl;
-    public int invlunerability;
+    public int invulnerability;
     public int teamRage; //when dead distribute power
     public int rechargeRate;
-    public bool unconcious;
+    public bool unconscious;
     public int xmax;
     public int xmin;
     public int ymax;

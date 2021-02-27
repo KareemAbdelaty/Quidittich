@@ -7,12 +7,14 @@ public class Main : MonoBehaviour
     public int Score = 0;
     public int TeamSize= 20;
     public int GoalLimit = 100;
-    public Vector3 griffindorStartpostion;
-    public Vector3 slythrinStartpostion;
+    public int griffindorStartpostion;
+    public int slythrinStartpostion;
     public GameObject land;
     public GameObject wizard;
     public GameObject snitch;
-    public GameObject[] wizards;
+    public GameObject[] griffindor;
+    public GameObject[] slythrin;
+    System.Random rand;
     public float snitchThrust;
     public int xmax;
     public int xmin;
@@ -29,30 +31,17 @@ public class Main : MonoBehaviour
         ymax = 1000;
         zmin = -500;
         zmax = 500;
-
+        rand = new System.Random();
+        griffindorStartpostion = 490;
+        slythrinStartpostion = -490;
+        griffindor = new GameObject[TeamSize];
+        slythrin = new GameObject[TeamSize];
         //create floor
-        land = Instantiate(land);
-        Rigidbody r = GameObject.FindGameObjectWithTag("Land").GetComponent<Rigidbody>();
-        r.useGravity = false;
+        setupLand();
         //create snitch
-        Instantiate(snitch);
-        SnitchBehaviourScript snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();
-        snitchScript.rb = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
-        snitchScript.rb.useGravity = false;
-        snitchScript.xmax = xmax;
-        snitchScript.xmin = xmin;
-        snitchScript.ymax = ymax;
-        snitchScript.ymin = ymin;
-        snitchScript.zmax = zmax;
-        snitchScript.zmin = zmin;
-        snitchScript.generateNewCoordinates();
-        snitchScript.thrust = snitchThrust;
-        snitchScript.generateForce();
+        setupSnitch();
         //create wizards'
-        for(int i =0; i < TeamSize; i++)
-        {
-            Instantiate(wizard);
-        }
+        setupWizards();
     }
 
     // Update is called once per frame
@@ -60,6 +49,7 @@ public class Main : MonoBehaviour
     {
         if(Score == GoalLimit)
         {
+            turnOff();
             endgame();
         }
     }
@@ -74,7 +64,103 @@ public class Main : MonoBehaviour
     }
     double generateStats(double m, double u)
     {
-        return m;
+        double u1 = 1.0 - rand.NextDouble(); 
+        double u2 = 1.0 - rand.NextDouble();
+        double randStdNormal = System.Math.Sqrt(-2.0 * System.Math.Log(u1)) *
+                     System.Math.Sin(2.0 * System.Math.PI * u2); 
+        double randNormal =
+                     m + u * randStdNormal;
+        return randNormal;
     }
-    
+    public void turnON()
+    {
+
+    }
+    public void turnOff()
+    {
+
+    }
+    public void resetPositios()
+    {
+
+    }
+    public void setupLand()
+    {
+        land = Instantiate(land);
+        Rigidbody r = GameObject.FindGameObjectWithTag("Land").GetComponent<Rigidbody>();
+        r.useGravity = false;
+    }
+    public void setupSnitch()
+    {
+        Instantiate(snitch);
+        SnitchBehaviourScript snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();
+        snitchScript.rb = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
+        snitchScript.rb.useGravity = false;
+        snitchScript.xmax = xmax;
+        snitchScript.xmin = xmin;
+        snitchScript.ymax = ymax;
+        snitchScript.ymin = ymin;
+        snitchScript.zmax = zmax;
+        snitchScript.zmin = zmin;
+        snitchScript.generateNewCoordinates();
+        snitchScript.thrust = snitchThrust;
+        snitchScript.generateForce();
+    }
+    public void setupWizards()
+    {
+        for (int i = 0; i < TeamSize; i++)
+        {
+            Debug.Log(10);
+            GameObject w = (GameObject)Instantiate(wizard);
+            WizardBehavior b = w.GetComponent<WizardBehavior>();
+            Rigidbody rb = w.GetComponent<Rigidbody>();
+            b.team = "griffindor";
+            b.aggresiveness = (int)generateStats(22, 3);
+            b.maxExhaustion = (int)generateStats(65, 13);
+            b.maxVelocity =(int) generateStats(18, 2);
+            b.weight = (int)generateStats(75, 12);
+            b.currentExhaustion = 0;
+            b.mindControl = rand.Next(0,5);
+            b.invulnerability = rand.Next(0, 5);
+            b.teamRage = rand.Next(0, 10);
+            b.rechargeRate = 3;
+            b.unconscious = false;
+            b.xmax = xmax;
+            b.xmin = xmin;
+            b.ymax = ymax;
+            b.ymin = ymin;
+            b.zmax = zmax;
+            b.zmin = zmin;
+            rb.useGravity = false;
+            w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, griffindorStartpostion);
+            griffindor[i] = w;
+        }
+        for (int i = 0; i < TeamSize; i++)
+        {
+            Debug.Log(11);
+            GameObject w = (GameObject)Instantiate(wizard);
+            WizardBehavior b = w.GetComponent<WizardBehavior>();
+            Rigidbody rb = w.GetComponent<Rigidbody>();
+            b.team = "slythrin";
+            b.aggresiveness = (int)generateStats(30, 7);
+            b.maxExhaustion =(int) generateStats(50, 15);
+            b.maxVelocity =(int) generateStats(16, 2);
+            b.weight =(int) generateStats(85, 17);
+            b.currentExhaustion = 0;
+            b.mindControl = rand.Next(0, 10);
+            b.invulnerability = rand.Next(0, 10);
+            b.teamRage = rand.Next(0, 10);
+            b.rechargeRate = 1;
+            b.unconscious = false;
+            b.xmax = xmax;
+            b.xmin = xmin;
+            b.ymax = ymax;
+            b.ymin = ymin;
+            b.zmax = zmax;
+            b.zmin = zmin;
+            rb.useGravity = false;
+            w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, slythrinStartpostion);
+            slythrin[i] = w;
+        }
+    }
 }

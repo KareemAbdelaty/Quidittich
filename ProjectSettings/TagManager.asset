@@ -7,6 +7,7 @@ TagManager:
   - Land
   - snitch
   - wizard
+  - main
   layers:
   - Default
   - TransparentFX
