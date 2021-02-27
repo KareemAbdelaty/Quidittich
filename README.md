@@ -9,8 +9,8 @@ awards the catching player's team a point, succesive catches award 2 points. The
 There are 2 types of Entities inside the game
 **Snitch:**
 <br />
-![image](https://user-images.githubusercontent.com/69083495/109401072-3e56f780-7955-11eb-9d74-3efabdccbb5d.png)
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/69083495/109402737-0655b180-7961-11eb-85b0-d386b1990653.gif)
+![snitch](https://user-images.githubusercontent.com/69083495/109402786-56347880-7961-11eb-9bb2-aeccd3e8ed98.gif)
+
 
 **Snitch Behaviour**
 During the game, the snitch will choose a random point inside the stadium and start travelling towards it. If it reaches its destination the snitch will choose another random point to move towards. As a magical being the snitch is able to fly and ignore gravity. Finally, if a wizard gets too close to the snitch and catches it, the snitch will award the wizard's team a point and then escapes by teleporting itself away.
@@ -19,7 +19,8 @@ During the game, the snitch will choose a random point inside the stadium and st
 <br />
 ![image](https://user-images.githubusercontent.com/69083495/109402033-297d6280-795b-11eb-9987-f71740bb8479.png)
 ![image](https://user-images.githubusercontent.com/69083495/109402009-0488ef80-795b-11eb-8462-de1a3b27881b.png)
-![green](https://user-images.githubusercontent.com/69083495/109402054-4dd93f00-795b-11eb-9531-77e5a0fc78b0.gif)
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/69083495/109402737-0655b180-7961-11eb-85b0-d386b1990653.gif)
+
 Not all wizards are created equal. Wizards have a wide range of traits that affect how they preform in game. Here is a list of these traits:
 Flying Ability: some wizards are more confident in their flying abilities than their peers. This allows them to reach a higher maximum velocity.
 Mind Control and Resistance: some wizards are skilled in mind magic. Them allows them to trick enemies that come close enough into helping them or to resist getting their mind controlled. All wizards can shake off mind control after a while.
