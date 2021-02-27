@@ -13,8 +13,8 @@ public class Main : MonoBehaviour
     public GameObject land;
     public GameObject wizard;
     public GameObject snitch;
-    public GameObject[] griffindor;
-    public GameObject[] slythrin;
+    public WizardBehavior[] griffindor;
+    public WizardBehavior[] slythrin;
     System.Random rand;
     public float snitchThrust;
     public float wizardThrust;
@@ -36,8 +36,8 @@ public class Main : MonoBehaviour
         rand = new System.Random();
         griffindorStartpostion = 490;
         slythrinStartpostion = -490;
-        griffindor = new GameObject[TeamSize];
-        slythrin = new GameObject[TeamSize];
+        griffindor = new WizardBehavior[TeamSize];
+        slythrin = new WizardBehavior[TeamSize];
         //create floor
         setupLand();
         //create snitch
@@ -125,7 +125,6 @@ public class Main : MonoBehaviour
             b.maxVelocity =(int) generateStats(18, 2);
             b.weight = (int)generateStats(75, 12);
             b.currentExhaustion = 0;
-            b.mindControl = rand.Next(0,5);
             b.invulnerability = rand.Next(0, 5);
             b.teamRage = rand.Next(0, 10);
             b.rechargeRate = 3;
@@ -143,7 +142,7 @@ public class Main : MonoBehaviour
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, griffindorStartpostion);
             MeshRenderer m = w.GetComponent<MeshRenderer>();
             m.material = Resources.Load("WizardRed", typeof(Material)) as Material;
-            griffindor[i] = w;
+            griffindor[i] = b;
         }
         for (int i = 0; i < TeamSize; i++)
         {
@@ -156,7 +155,6 @@ public class Main : MonoBehaviour
             b.maxVelocity =(int) generateStats(16, 2);
             b.weight =(int) generateStats(85, 17);
             b.currentExhaustion = 0;
-            b.mindControl = rand.Next(0, 10);
             b.invulnerability = rand.Next(0, 10);
             b.teamRage = rand.Next(0, 10);
             b.rechargeRate = 1;
@@ -174,7 +172,7 @@ public class Main : MonoBehaviour
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, slythrinStartpostion);
             MeshRenderer m = w.GetComponent<MeshRenderer>();
             m.material = Resources.Load("WizardGreen", typeof(Material)) as Material; 
-            slythrin[i] = w;
+            slythrin[i] = b;
         }
     }
     public void slythrinWin()

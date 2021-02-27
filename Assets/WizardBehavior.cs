@@ -11,8 +11,7 @@ public class WizardBehavior : MonoBehaviour
     public int maxVelocity;
     public int weight;
     public int currentExhaustion;
-    public int mindControl;
-    public bool mindControlled;
+    public int share;
     public bool sharingPower;
     public float repulsion;
     public int invulnerability;
@@ -22,6 +21,7 @@ public class WizardBehavior : MonoBehaviour
     public int xmax;
     public int xmin;
     public int ymax;
+    public int timer;
     public int ymin;
     public int zmax;
     public int zmin;
@@ -36,9 +36,9 @@ public class WizardBehavior : MonoBehaviour
     void Start()
     {
         exhausted = false;
-        mindControlled = false;
         sharingPower = false;
         repulsion = 200;
+        timer = 0;
     }
 
 
@@ -46,11 +46,11 @@ public class WizardBehavior : MonoBehaviour
     {
         if (!unconscious)
         {
-            if (currentExhaustion == maxExhaustion)
+            if (currentExhaustion >= maxExhaustion)
             {
                 exhausted = true;
             }
-            else if (currentExhaustion == 0)
+            else if (currentExhaustion <= 0)
             {
                 exhausted = false;
             }
@@ -68,37 +68,141 @@ public class WizardBehavior : MonoBehaviour
     }
     void onKnockOut()
     {
+        System.Random rng = new System.Random();
+        int n = rng.Next(0, 100);
+        if(n <= invulnerability)
+        {
+            Debug.Log("INVULNRABLE!");
+            currentExhaustion += 10;
+            return;
+        }
+        n = rng.Next(0, 100);
+        if (n <= share)
+        {
+            Debug.Log("GO TEAM!");
+            sharingPower = true;
+            Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+            if(team == "slythrin")
+            {
+                for(int i = 0; i< m.slythrin.Length; i++)
+                {
+                    m.slythrin[i].currentExhaustion = 0;
+                    m.slythrin[i].maxVelocity += maxVelocity;
+                    m.slythrin[i].maxExhaustion += maxExhaustion;
+                    m.slythrin[i].aggresiveness += aggresiveness;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < m.griffindor.Length; i++)
+                {
+                    m.griffindor[i].currentExhaustion = 0;
+                    m.griffindor[i].maxVelocity += maxVelocity;
+                    m.griffindor[i].maxExhaustion += maxExhaustion;
+                    m.griffindor[i].aggresiveness += aggresiveness;
+                }
+            }
+        }
         unconscious = true;
-        if(team == "griffindor")
-        {
-            transform.position = new Vector3(Random.Range(xmin, xmax), 10, 490);
-        }
-        else
-        {
-            transform.position = new Vector3(Random.Range(xmin, xmax), 10, -490);
-        }
+        rb.useGravity = true;
+
+
     }
     void onWakeup()
     {
         unconscious = false;
+        currentExhaustion = 0;
+        if (sharingPower)
+        {
+            sharingPower = false;
+            Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+            if (team == "slythrin")
+            {
+                for (int i = 0; i < m.slythrin.Length; i++)
+                {
+                    m.slythrin[i].maxVelocity -= maxVelocity;
+                    m.slythrin[i].maxExhaustion -= maxExhaustion;
+                    m.slythrin[i].aggresiveness -= aggresiveness;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < m.griffindor.Length; i++)
+                {
+                    m.griffindor[i].maxVelocity -= maxVelocity;
+                    m.griffindor[i].maxExhaustion -= maxExhaustion;
+                    m.griffindor[i].aggresiveness -= aggresiveness;
+                }
+            }
+
+        }
+        
+    }
+    IEnumerator wakeup()
+    {
+        rb.useGravity = false;
+        yield return new WaitForSeconds(5);
+        onWakeup();
     }
     void recharging()
     {
-
+        currentExhaustion--;
     }
     public void generateForce()
     {
+        timer++;
+        if(timer == 50)
+        {
+            currentExhaustion++;
+            timer = 0;
+        }
         Vector3 snitch = GameObject.FindGameObjectWithTag("snitch").transform.position;
         Vector3 vec2 = new Vector3(snitch.x, snitch.y, snitch.z);
         vec = (vec2 - transform.position).normalized;
-        opposite = new Vector3(-vec.x, -vec.y, -vec.z);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10);
+        Vector3 rep = Vector3.zero;
+        for(int i = 0; i< hitColliders.Length; i++)
+        {
+            if(hitColliders[i].gameObject.tag == "snitch")
+            {
+                continue;
+            }
+            Vector3 obj = hitColliders[i].gameObject.transform.position;
+            Vector3 vec3 = new Vector3(obj.x, obj.y, obj.z);
+            rep  = -(vec3 - transform.position).normalized;
+            
+
+        }
+        rep = rep * repulsion;
+        vec = vec + rep;
+        rb.AddForce(opposite * thrust, ForceMode.Force);
         rb.AddForce(vec * thrust, ForceMode.Force);
+        opposite = -vec;
+        float temp = rb.velocity.magnitude;
+        if (temp > maxVelocity)
+        {
+            rb.AddForce(opposite * thrust, ForceMode.Force);
+        }
+
     }
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Land")
         {
-            onKnockOut();
+            if (!unconscious)
+            {
+                unconscious = true;
+                if (team == "griffindor")
+                {
+                    transform.position = new Vector3(Random.Range(xmin, xmax), 50, 490);
+                    StartCoroutine(wakeup());
+                }
+                else
+                {
+                    transform.position = new Vector3(Random.Range(xmin, xmax), 50, -490);
+                    StartCoroutine(wakeup());
+                }
+            }
         }
         if (collision.gameObject.tag == "wizard")
         {
