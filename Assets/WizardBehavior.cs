@@ -25,11 +25,6 @@ public class WizardBehavior : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void FixedUpdate()
     {
@@ -44,6 +39,14 @@ public class WizardBehavior : MonoBehaviour
 
     }
     void onWakeup()
+    {
+
+    }
+    void tired()
+    {
+
+    }
+    void recharging()
     {
 
     }

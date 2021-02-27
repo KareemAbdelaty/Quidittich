@@ -41,8 +41,11 @@ public class Main : MonoBehaviour
         snitchScript.generateNewCoordinates();
         snitchScript.thrust = snitchThrust;
         snitchScript.generateForce();
-        //create wizards
-        Instantiate(wizard);
+        //create wizards'
+        for(int i =0; i < TeamSize; i++)
+        {
+            Instantiate(wizard);
+        }
     }
 
     // Update is called once per frame
@@ -59,5 +62,9 @@ public class Main : MonoBehaviour
     {
         //restart
     }
-
+    double generateStats(double m, double u)
+    {
+        return m;
+    }
+    
 }

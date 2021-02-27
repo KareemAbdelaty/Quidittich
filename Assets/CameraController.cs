@@ -14,6 +14,30 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        Vector3 Vec = transform.localPosition;
+        Vec.y += Input.GetAxis("Jump") * Time.deltaTime * 20;
+        Vec.x += Input.GetAxis("Horizontal") * Time.deltaTime * 20;
+        Vec.z += Input.GetAxis("Vertical") * Time.deltaTime * 20;
+        transform.localPosition = Vec;
+        if (Input.GetKey(KeyCode.W))
+        {
+            this.transform.Rotate(Vector3.left, -5);
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            this.transform.Rotate(Vector3.left, 5);
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            this.transform.Rotate(Vector3.up, -5);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            this.transform.Rotate(Vector3.up, 5);
+        }
     }
 }
