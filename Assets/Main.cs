@@ -188,6 +188,6 @@ public class Main : MonoBehaviour
     void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 100, 20), "Griffindor Score" + griffindorScore);
-        GUI.Label(new Rect(150, 10, 100, 20), "Slythrin Score" + slythrinScore);
+        GUI.Label(new Rect(170, 10, 100, 20), "Slythrin Score " + slythrinScore);
     }
 }

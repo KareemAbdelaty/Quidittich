@@ -247,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slythrinScore: 0
   griffindorScore: 0
-  TeamSize: 1
+  TeamSize: 20
   GoalLimit: 100
   griffindorStartpostion: 0
   slythrinStartpostion: 0
