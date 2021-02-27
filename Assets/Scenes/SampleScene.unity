@@ -247,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slythrinScore: 0
   griffindorScore: 0
-  TeamSize: 20
+  TeamSize: 1
   GoalLimit: 100
   griffindorStartpostion: 0
   slythrinStartpostion: 0
@@ -256,14 +256,15 @@ MonoBehaviour:
   snitch: {fileID: 3801550475772501825, guid: 774381dae572ec642ba5007673c87967, type: 3}
   griffindor: []
   slythrin: []
-  snitchThrust: 80
-  wizardThrust: 800
+  snitchThrust: 1000
+  wizardThrust: 1200
   xmax: 100
   xmin: -100
   ymax: 1000
   ymin: 10
   zmax: 0
   zmin: 100
+  repulsion: 0
 --- !u!4 &719570928
 Transform:
   m_ObjectHideFlags: 0

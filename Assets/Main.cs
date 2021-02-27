@@ -24,15 +24,27 @@ public class Main : MonoBehaviour
     public int ymin;
     public int zmax;
     public int zmin;
+    public int repulsion;
+    public bool toggle;
+    public enum views
+    {
+        ingame,
+        griffindor,
+        slythrin,
+    }
+    public views view;
+    public int win; //indicates which gui to draw
     // Start is called before the first frame update
     void Start()
     {
+        toggle = false;
         xmin = -500;
         xmax = 500;
         ymin = 0;
         ymax = 200;
         zmin = -500;
         zmax = 500;
+        view = views.ingame;
         rand = new System.Random();
         griffindorStartpostion = 490;
         slythrinStartpostion = -490;
@@ -49,6 +61,14 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (toggle)
+        {
+            turnOff();
+        }
+        else
+        {
+            turnON();
+        }
         if(slythrinScore >= GoalLimit)
         {
             turnOff();
@@ -60,13 +80,13 @@ public class Main : MonoBehaviour
         }
     }
 
-    void endgame() { 
-        //endgame screen
-    }
 
     void restart()
     {
-        //restart
+        griffindorScore = 0;
+        slythrinScore = 0;
+        resetPositios();
+        view = views.ingame;
     }
     double generateStats(double m, double u)
     {
@@ -80,14 +100,50 @@ public class Main : MonoBehaviour
     }
     public void turnON()
     {
+        //snitch
+        Rigidbody snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
+        snitchScript.constraints = RigidbodyConstraints.None;
+        //wizards
+        GameObject[] wizards = GameObject.FindGameObjectsWithTag("wizard");
+        for(int i = 0; i < wizards.Length; i++)
+        {
+            Rigidbody wr = wizards[i].GetComponent<Rigidbody>();
+            wr.constraints = RigidbodyConstraints.None;
+        }
 
     }
     public void turnOff()
     {
-
+        //snitch
+        Rigidbody snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
+        snitchScript.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+        //wizards
+        GameObject[] wizards = GameObject.FindGameObjectsWithTag("wizard");
+        for (int i = 0; i < wizards.Length; i++)
+        {
+            Rigidbody wr = wizards[i].GetComponent<Rigidbody>();
+            wr.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+        }
     }
     public void resetPositios()
     {
+        GameObject s = GameObject.FindGameObjectWithTag("snitch");
+        SnitchBehaviourScript snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();
+        s.transform.position = new Vector3(snitchScript.startx, snitchScript.starty, snitchScript.startz);
+        GameObject[] wizards = GameObject.FindGameObjectsWithTag("wizard");
+
+        for (int i = 0; i < wizards.Length; i++)
+        {
+            WizardBehavior b = wizards[i].GetComponent<WizardBehavior>();
+            if(b.team == "griffindor")
+            {
+                wizards[i].transform.position = new Vector3(Random.Range(xmin, xmax), 10, griffindorStartpostion);
+            }
+            else
+            {
+                wizards[i].transform.position = new Vector3(Random.Range(xmin, xmax), 10, slythrinStartpostion);
+            }
+        }
 
     }
     public void setupLand()
@@ -95,6 +151,8 @@ public class Main : MonoBehaviour
         land = Instantiate(land);
         Rigidbody r = GameObject.FindGameObjectWithTag("Land").GetComponent<Rigidbody>();
         r.useGravity = false;
+        r.freezeRotation = true;
+        r.constraints = RigidbodyConstraints.FreezePosition;
     }
     public void setupSnitch()
     {
@@ -120,6 +178,7 @@ public class Main : MonoBehaviour
             WizardBehavior b = w.GetComponent<WizardBehavior>();
             Rigidbody rb = w.GetComponent<Rigidbody>();
             b.team = "griffindor";
+            b.id = i;
             b.aggresiveness = (int)generateStats(22, 3);
             b.maxExhaustion = (int)generateStats(65, 13);
             b.maxVelocity =(int) generateStats(18, 2);
@@ -136,9 +195,10 @@ public class Main : MonoBehaviour
             b.thrust = wizardThrust;
             b.zmax = zmax;
             b.zmin = zmin;
+            b.repulsion = repulsion;
             b.rb = rb;
             rb.useGravity = false;
-            rb.mass = b.weight;
+            rb.mass =  b.weight*0.01f;
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, griffindorStartpostion);
             MeshRenderer m = w.GetComponent<MeshRenderer>();
             m.material = Resources.Load("WizardRed", typeof(Material)) as Material;
@@ -150,6 +210,7 @@ public class Main : MonoBehaviour
             WizardBehavior b = w.GetComponent<WizardBehavior>();
             Rigidbody rb = w.GetComponent<Rigidbody>();
             b.team = "slythrin";
+            b.id = i;
             b.aggresiveness = (int)generateStats(30, 7);
             b.maxExhaustion =(int) generateStats(50, 15);
             b.maxVelocity =(int) generateStats(16, 2);
@@ -165,10 +226,11 @@ public class Main : MonoBehaviour
             b.ymin = ymin;
             b.zmax = zmax;
             b.zmin = zmin;
+            b.repulsion = repulsion;
             b.thrust = wizardThrust;
             b.rb = rb;
             rb.useGravity = false;
-            rb.mass = b.weight;
+            rb.mass = b.weight*0.01f;
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, slythrinStartpostion);
             MeshRenderer m = w.GetComponent<MeshRenderer>();
             m.material = Resources.Load("WizardGreen", typeof(Material)) as Material; 
@@ -177,15 +239,38 @@ public class Main : MonoBehaviour
     }
     public void slythrinWin()
     {
-
+        view = views.slythrin;
     }
     public void griffindorWin()
     {
-
+        view = views.griffindor;
     }
     void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 100, 20), "Griffindor Score" + griffindorScore);
-        GUI.Label(new Rect(170, 10, 100, 20), "Slythrin Score " + slythrinScore);
+        switch(view)
+        {
+            case views.ingame:
+                string a = "Griffindor Score " + griffindorScore;
+                string b = "Slythrin Score " + slythrinScore;
+                GUI.Label(new Rect(10, 10, 120, 20), a);
+                GUI.Label(new Rect(Screen.width - 200, 10, 120, 20), b);
+                toggle = GUI.Toggle(new Rect(Screen.width / 2, 10, 100, 30), toggle, "Pause");
+                break;
+            case views.griffindor:
+                GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 500, 500), "Griffindor Win");
+                if (GUI.Button(new Rect(Screen.width/2, Screen.height- 40, 50, 30), "Restart"))
+                {
+                    restart();
+                }                   
+                break;
+            case views.slythrin:
+                GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 500, 500), "Slythrin win");
+                if (GUI.Button(new Rect(Screen.width / 2, Screen.height - 40, 50, 30), "Restart"))
+                {
+                    restart();
+                }
+                break;
+
+        }
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class WizardBehavior : MonoBehaviour
 {
     public string team;
+    public int id;
+    public bool on;
     public int aggresiveness;
     public int maxExhaustion;
     public bool exhausted;
@@ -37,13 +39,28 @@ public class WizardBehavior : MonoBehaviour
     {
         exhausted = false;
         sharingPower = false;
-        repulsion = 200;
+        on = true;
         timer = 0;
+        initForce();
     }
 
 
     void FixedUpdate()
     {
+        Vector3 p = transform.position;
+        if(p.x < xmin || p.x > xmax)
+        {
+            p.x = 50;
+        }
+        if (p.y < ymin || p.y > ymax)
+        {
+            p.y = 200;
+        }
+        if (p.z < zmin || p.z > zmax)
+        {
+            p.z = 50;
+        }
+        transform.position = p;
         if (!unconscious)
         {
             if (currentExhaustion >= maxExhaustion)
@@ -63,11 +80,16 @@ public class WizardBehavior : MonoBehaviour
                 recharging();
             }
         }
+        else
+        {
+
+        }
 
 
     }
     void onKnockOut()
     {
+        rb.velocity = Vector3.zero;
         System.Random rng = new System.Random();
         int n = rng.Next(0, 100);
         if(n <= invulnerability)
@@ -86,6 +108,10 @@ public class WizardBehavior : MonoBehaviour
             {
                 for(int i = 0; i< m.slythrin.Length; i++)
                 {
+                    if (m.slythrin[i].id == id)
+                    {
+                        continue;
+                    }
                     m.slythrin[i].currentExhaustion = 0;
                     m.slythrin[i].maxVelocity += maxVelocity;
                     m.slythrin[i].maxExhaustion += maxExhaustion;
@@ -96,6 +122,10 @@ public class WizardBehavior : MonoBehaviour
             {
                 for (int i = 0; i < m.griffindor.Length; i++)
                 {
+                    if (m.griffindor[i].id == id)
+                    {
+                        continue;
+                    }
                     m.griffindor[i].currentExhaustion = 0;
                     m.griffindor[i].maxVelocity += maxVelocity;
                     m.griffindor[i].maxExhaustion += maxExhaustion;
@@ -105,6 +135,7 @@ public class WizardBehavior : MonoBehaviour
         }
         unconscious = true;
         rb.useGravity = true;
+        StartCoroutine(wakeup());
 
 
     }
@@ -112,6 +143,7 @@ public class WizardBehavior : MonoBehaviour
     {
         unconscious = false;
         currentExhaustion = 0;
+        initForce();
         if (sharingPower)
         {
             sharingPower = false;
@@ -120,6 +152,10 @@ public class WizardBehavior : MonoBehaviour
             {
                 for (int i = 0; i < m.slythrin.Length; i++)
                 {
+                    if (m.slythrin[i].id == id)
+                    {
+                        continue;
+                    }
                     m.slythrin[i].maxVelocity -= maxVelocity;
                     m.slythrin[i].maxExhaustion -= maxExhaustion;
                     m.slythrin[i].aggresiveness -= aggresiveness;
@@ -129,6 +165,10 @@ public class WizardBehavior : MonoBehaviour
             {
                 for (int i = 0; i < m.griffindor.Length; i++)
                 {
+                    if (m.griffindor[i].id == id)
+                    {
+                        continue;
+                    }
                     m.griffindor[i].maxVelocity -= maxVelocity;
                     m.griffindor[i].maxExhaustion -= maxExhaustion;
                     m.griffindor[i].aggresiveness -= aggresiveness;
@@ -147,6 +187,38 @@ public class WizardBehavior : MonoBehaviour
     void recharging()
     {
         currentExhaustion--;
+    }
+    public void initForce()
+    {
+        timer++;
+        if (timer == 50)
+        {
+            currentExhaustion++;
+            timer = 0;
+        }
+        Vector3 snitch = GameObject.FindGameObjectWithTag("snitch").transform.position;
+        Vector3 vec2 = new Vector3(snitch.x, snitch.y, snitch.z);
+        vec = (vec2 - transform.position).normalized;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10);
+        Vector3 rep = Vector3.zero;
+        for (int i = 0; i < hitColliders.Length; i++)
+        {
+            if (hitColliders[i].gameObject.tag == "snitch")
+            {
+                continue;
+            }
+            Vector3 obj = hitColliders[i].gameObject.transform.position;
+            Vector3 vec3 = new Vector3(obj.x, obj.y, obj.z);
+            rep = -(vec3 - transform.position).normalized;
+
+
+        }
+        //   rep = rep * repulsion;
+        vec = vec + rep;
+        rb.AddForce(vec * thrust, ForceMode.Force);
+        opposite = -vec;
+        float temp = rb.velocity.magnitude;
+
     }
     public void generateForce()
     {
@@ -173,16 +245,13 @@ public class WizardBehavior : MonoBehaviour
             
 
         }
-        rep = rep * repulsion;
+     //   rep = rep * repulsion;
         vec = vec + rep;
         rb.AddForce(opposite * thrust, ForceMode.Force);
         rb.AddForce(vec * thrust, ForceMode.Force);
         opposite = -vec;
         float temp = rb.velocity.magnitude;
-        if (temp > maxVelocity)
-        {
-            rb.AddForce(opposite * thrust, ForceMode.Force);
-        }
+        
 
     }
     public void OnCollisionEnter(Collision collision)
@@ -194,12 +263,12 @@ public class WizardBehavior : MonoBehaviour
                 unconscious = true;
                 if (team == "griffindor")
                 {
-                    transform.position = new Vector3(Random.Range(xmin, xmax), 50, 490);
+                    transform.position = new Vector3(Random.Range(xmin, xmax), 500, 490);
                     StartCoroutine(wakeup());
                 }
                 else
                 {
-                    transform.position = new Vector3(Random.Range(xmin, xmax), 50, -490);
+                    transform.position = new Vector3(Random.Range(xmin, xmax), 500, -490);
                     StartCoroutine(wakeup());
                 }
             }

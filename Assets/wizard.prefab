@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 3274042741155190465}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 1.986, z: -2.013}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_LocalScale: {x: 120, y: 120, z: 80}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -112,12 +112,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  id: 0
   aggresiveness: 0
   maxExhaustion: 0
+  exhausted: 0
   maxVelocity: 0
   weight: 0
   currentExhaustion: 0
-  mindControl: 0
+  share: 0
+  sharingPower: 0
+  repulsion: 0
   invulnerability: 0
   teamRage: 0
   rechargeRate: 0
@@ -125,6 +129,7 @@ MonoBehaviour:
   xmax: 0
   xmin: 0
   ymax: 0
+  timer: 0
   ymin: 0
   zmax: 0
   zmin: 0
