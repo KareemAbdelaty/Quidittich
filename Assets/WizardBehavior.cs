@@ -15,9 +15,14 @@ public class WizardBehavior : MonoBehaviour
     public int teamRage; //when dead distribute power
     public int rechargeRate;
     public bool unconcious;
-    public int xLimit;
-    public int yLimit;
-    public int zLimit;
+    public int xmax;
+    public int xmin;
+    public int ymax;
+    public int ymin;
+    public int zmax;
+    public int zmin;
+    public int startx;
+    public int starty;
 
     // Start is called before the first frame update
     void Start()
