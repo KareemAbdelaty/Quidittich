@@ -8,7 +8,7 @@ public class Main : MonoBehaviour
     public int TeamSize= 20;
     public int GoalLimit = 100;
     public int griffindorStartpostion;
-    public int slythrinStartpostion;
+    public int   slythrinStartpostion;
     public GameObject land;
     public GameObject wizard;
     public GameObject snitch;
@@ -110,7 +110,6 @@ public class Main : MonoBehaviour
     {
         for (int i = 0; i < TeamSize; i++)
         {
-            Debug.Log(10);
             GameObject w = (GameObject)Instantiate(wizard);
             WizardBehavior b = w.GetComponent<WizardBehavior>();
             Rigidbody rb = w.GetComponent<Rigidbody>();
@@ -132,12 +131,14 @@ public class Main : MonoBehaviour
             b.zmax = zmax;
             b.zmin = zmin;
             rb.useGravity = false;
+            rb.mass = b.weight / 100;
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, griffindorStartpostion);
+            MeshRenderer m = w.GetComponent<MeshRenderer>();
+            m.material = Resources.Load("WizardRed", typeof(Material)) as Material;
             griffindor[i] = w;
         }
         for (int i = 0; i < TeamSize; i++)
         {
-            Debug.Log(11);
             GameObject w = (GameObject)Instantiate(wizard);
             WizardBehavior b = w.GetComponent<WizardBehavior>();
             Rigidbody rb = w.GetComponent<Rigidbody>();
@@ -159,7 +160,10 @@ public class Main : MonoBehaviour
             b.zmax = zmax;
             b.zmin = zmin;
             rb.useGravity = false;
+            rb.mass = b.weight / 100;
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, slythrinStartpostion);
+            MeshRenderer m = w.GetComponent<MeshRenderer>();
+            m.material = Resources.Load("WizardGreen", typeof(Material)) as Material; 
             slythrin[i] = w;
         }
     }

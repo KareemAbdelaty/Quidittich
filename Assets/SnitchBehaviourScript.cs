@@ -42,7 +42,6 @@ public class SnitchBehaviourScript : MonoBehaviour
         }
         if (upward)
         {
-            Debug.Log(456);
             Vector3 vec3 = new Vector3(0, -50, 0);
             rb.AddForce(vec3, ForceMode.Force);
             upward = false ;
@@ -70,7 +69,6 @@ public class SnitchBehaviourScript : MonoBehaviour
     {
         if(collision.gameObject.tag == "Land")
         {
-            Debug.Log(123);
             Vector3 vec3 = new Vector3(0, 50, 0);
             rb.AddForce(vec3, ForceMode.Force);
             upward = true;
