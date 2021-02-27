@@ -247,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slythrinScore: 0
   griffindorScore: 0
-  TeamSize: 1
+  TeamSize: 20
   GoalLimit: 100
   griffindorStartpostion: 0
   slythrinStartpostion: 0
@@ -256,8 +256,8 @@ MonoBehaviour:
   snitch: {fileID: 3801550475772501825, guid: 774381dae572ec642ba5007673c87967, type: 3}
   griffindor: []
   slythrin: []
-  snitchThrust: 1000
-  wizardThrust: 1200
+  snitchThrust: 100
+  wizardThrust: 120
   xmax: 100
   xmin: -100
   ymax: 1000
@@ -265,6 +265,9 @@ MonoBehaviour:
   zmax: 0
   zmin: 100
   repulsion: 0
+  toggle: 0
+  view: 0
+  win: 0
 --- !u!4 &719570928
 Transform:
   m_ObjectHideFlags: 0
@@ -356,13 +359,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 300, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0

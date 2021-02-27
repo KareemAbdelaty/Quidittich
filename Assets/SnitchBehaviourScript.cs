@@ -118,7 +118,7 @@ public class SnitchBehaviourScript : MonoBehaviour
         {
             points = 1;
         }
-        Vector3 vec3 = new Vector3(startx, starty, startz);
+        Vector3 vec3 = new Vector3(Random.Range(xmin,xmax), Random.Range(ymin, ymax), Random.Range(zmin, zmax));
         transform.position = vec3;
         rb.velocity = Vector3.zero;
         initForce();

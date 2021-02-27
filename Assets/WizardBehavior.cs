@@ -6,20 +6,21 @@ public class WizardBehavior : MonoBehaviour
 {
     public string team;
     public int id;
-    public bool on;
     public int aggresiveness;
     public int maxExhaustion;
     public bool exhausted;
     public int maxVelocity;
     public int weight;
     public int currentExhaustion;
-    public int share;
     public bool sharingPower;
     public float repulsion;
     public int invulnerability;
     public int teamRage; //when dead distribute power
     public int rechargeRate;
     public bool unconscious;
+    public bool mindControlling;
+    public bool mindcontrol;
+    public GameObject knockOutby;
     public int xmax;
     public int xmin;
     public int ymax;
@@ -39,8 +40,9 @@ public class WizardBehavior : MonoBehaviour
     {
         exhausted = false;
         sharingPower = false;
-        on = true;
         timer = 0;
+        knockOutby = null;
+        mindControlling = false;
         initForce();
     }
 
@@ -66,10 +68,15 @@ public class WizardBehavior : MonoBehaviour
             if (currentExhaustion >= maxExhaustion)
             {
                 exhausted = true;
+                rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+                Debug.Log(team + " wizard " + id + " is exhausted");
             }
             else if (currentExhaustion <= 0)
             {
                 exhausted = false;
+                rb.constraints = RigidbodyConstraints.None;
+                initForce();
+                Debug.Log(team + " wizard " + id + " has rested");
             }
             if (!exhausted)
             {
@@ -80,30 +87,31 @@ public class WizardBehavior : MonoBehaviour
                 recharging();
             }
         }
-        else
-        {
 
-        }
 
 
     }
     void onKnockOut()
     {
+        Debug.Log(team + " wizard " + id + " is knocked out");
         rb.velocity = Vector3.zero;
+        Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+        m.knockouts++;
         System.Random rng = new System.Random();
         int n = rng.Next(0, 100);
         if(n <= invulnerability)
         {
-            Debug.Log("INVULNRABLE!");
+            Debug.Log(team + " wizard " + id + " is INVULNERABLE");
             currentExhaustion += 10;
+            m.knockouts--;
             return;
         }
         n = rng.Next(0, 100);
-        if (n <= share)
+        if (n <= teamRage)
         {
-            Debug.Log("GO TEAM!");
+            Debug.Log(team + " is enraged because wizard " + id + " was knocked out ");
             sharingPower = true;
-            Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+            m.powershares++;
             if(team == "slythrin")
             {
                 for(int i = 0; i< m.slythrin.Length; i++)
@@ -133,23 +141,46 @@ public class WizardBehavior : MonoBehaviour
                 }
             }
         }
+        n = rng.Next(0, 100);
+        if (n < mindcontrol)
+        {
+            m.mindControlls++;
+            WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
+            mindControlling = true;
+            if (knockOutby.team == "slythrin")
+            {
+                w.team = "griffindor";
+                MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
+                me.material = Resources.Load("WizardRed", typeof(Material)) as Material;
+            }
+            else
+            {
+                w.team = "slythrin";
+                MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
+                me.material = Resources.Load("WizardGreen", typeof(Material)) as Material;
+            }
+        }
         unconscious = true;
         rb.useGravity = true;
-        StartCoroutine(wakeup());
 
 
     }
     void onWakeup()
     {
+
         unconscious = false;
         currentExhaustion = 0;
+        Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
         initForce();
+        m.knockouts--:
+        Debug.Log(team + " wizard " + id + " is back in the game");
         if (sharingPower)
         {
+            m.powershares--;
             sharingPower = false;
-            Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
             if (team == "slythrin")
             {
+                Debug.Log(team + " is now calmer");
                 for (int i = 0; i < m.slythrin.Length; i++)
                 {
                     if (m.slythrin[i].id == id)
@@ -169,6 +200,7 @@ public class WizardBehavior : MonoBehaviour
                     {
                         continue;
                     }
+                    Debug.Log(team + " is now calmer");
                     m.griffindor[i].maxVelocity -= maxVelocity;
                     m.griffindor[i].maxExhaustion -= maxExhaustion;
                     m.griffindor[i].aggresiveness -= aggresiveness;
@@ -176,7 +208,26 @@ public class WizardBehavior : MonoBehaviour
             }
 
         }
-        
+        if (mindControlling == true)
+        {
+            m.mindControlls--;
+            WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
+            mindControlling = false ;
+            if (knockOutby.team == "slythrin")
+            {
+                w.team = "griffindor";
+                MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
+                me.material = Resources.Load("WizardRed", typeof(Material)) as Material;
+            }
+            else
+            {
+                w.team = "slythrin";
+                MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
+                me.material = Resources.Load("WizardGreen", typeof(Material)) as Material;
+            }
+            knockOutby = null;
+        }
+
     }
     IEnumerator wakeup()
     {
@@ -283,11 +334,13 @@ public class WizardBehavior : MonoBehaviour
                 double player2 = w.aggresiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (w.currentExhaustion / w.maxExhaustion));
                 if (player1 <= player2)
                 {
+                    knockOutby = collision.gameObject; ;
                     onKnockOut();
                 }
                 else
                 {
                     w.onKnockOut();
+                    w.knockOutby = this;
                 }
             }
             else
@@ -297,10 +350,12 @@ public class WizardBehavior : MonoBehaviour
                 double player2 = w.aggresiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (w.currentExhaustion / w.maxExhaustion));
                  if (player1 <= player2 && rng.Next(0, 100) > 95)
                  {
+                    Debug.Log("Friendly fire at " +team);
                     onKnockOut();
                   }
                  else if (rng.Next(0, 100) > 95)
                  {
+                    Debug.Log("Friendly fire at " +team);
                     w.onKnockOut();
                   }
                 }

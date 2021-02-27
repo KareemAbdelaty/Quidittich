@@ -25,6 +25,9 @@ public class Main : MonoBehaviour
     public int zmax;
     public int zmin;
     public int repulsion;
+    public int knockouts;
+    public int powershares;
+    public int mindcontrolls;
     public bool toggle;
     public enum views
     {
@@ -38,12 +41,15 @@ public class Main : MonoBehaviour
     void Start()
     {
         toggle = false;
-        xmin = -500;
-        xmax = 500;
+        xmin = -700;
+        xmax = 700;
         ymin = 0;
-        ymax = 200;
-        zmin = -500;
-        zmax = 500;
+        ymax = 500;
+        zmin = -700;
+        zmax = 700;
+        knockouts =0;
+        powershares =0;
+        mindcontrolls = 0;
         view = views.ingame;
         rand = new System.Random();
         griffindorStartpostion = 490;
@@ -85,8 +91,12 @@ public class Main : MonoBehaviour
     {
         griffindorScore = 0;
         slythrinScore = 0;
+        knockouts = 0;
+        powershares = 0;
+        mindcontrolls = 0;
         resetPositios();
         view = views.ingame;
+        turnON();
     }
     double generateStats(double m, double u)
     {
@@ -102,13 +112,17 @@ public class Main : MonoBehaviour
     {
         //snitch
         Rigidbody snitchScript = GameObject.FindGameObjectWithTag("snitch").GetComponent<Rigidbody>();
+        SnitchBehaviourScript snitchScript2 = GameObject.FindGameObjectWithTag("snitch").GetComponent<SnitchBehaviourScript>();
         snitchScript.constraints = RigidbodyConstraints.None;
+        snitchScript2.initForce();
         //wizards
         GameObject[] wizards = GameObject.FindGameObjectsWithTag("wizard");
         for(int i = 0; i < wizards.Length; i++)
         {
             Rigidbody wr = wizards[i].GetComponent<Rigidbody>();
             wr.constraints = RigidbodyConstraints.None;
+            WizardBehavior b = wizards[i].GetComponent<WizardBehavior>();
+            b.initForce();
         }
 
     }
@@ -187,6 +201,7 @@ public class Main : MonoBehaviour
             b.invulnerability = rand.Next(0, 5);
             b.teamRage = rand.Next(0, 10);
             b.rechargeRate = 3;
+            b.mindControl = rand.Next(0, 8);
             b.unconscious = false;
             b.xmax = xmax;
             b.xmin = xmin;
@@ -219,6 +234,7 @@ public class Main : MonoBehaviour
             b.invulnerability = rand.Next(0, 10);
             b.teamRage = rand.Next(0, 10);
             b.rechargeRate = 1;
+            b.mindControl = rand.Next(0, 15);
             b.unconscious = false;
             b.xmax = xmax;
             b.xmin = xmin;
@@ -252,8 +268,14 @@ public class Main : MonoBehaviour
             case views.ingame:
                 string a = "Griffindor Score " + griffindorScore;
                 string b = "Slythrin Score " + slythrinScore;
+                string c = "current Knockouts: " + knockouts;
+                string d = "current powershares: " + powershares;
+                string e = "current mind controlls " + mindcontrolls;
                 GUI.Label(new Rect(10, 10, 120, 20), a);
                 GUI.Label(new Rect(Screen.width - 200, 10, 120, 20), b);
+                GUI.Label(new Rect(10, 50, 120, 20), c);
+                GUI.Label(new Rect(Screen.width - 200, 50, 120, 20), d);
+                GUI.Label(new Rect(10, 90, 120, 20), e);
                 toggle = GUI.Toggle(new Rect(Screen.width / 2, 10, 100, 30), toggle, "Pause");
                 break;
             case views.griffindor:
