@@ -9,7 +9,10 @@ awards the catching player's team a point, succesive catches award 2 points. The
 There are 2 types of Entities inside the game <br />
 **Snitch:**
 <br />
-![snitch](https://user-images.githubusercontent.com/69083495/109402786-56347880-7961-11eb-9bb2-aeccd3e8ed98.gif)<br />
+
+![snitch](https://user-images.githubusercontent.com/69083495/109402786-56347880-7961-11eb-9bb2-aeccd3e8ed98.gif)
+
+<br />
 
 
 **Snitch Behaviour** <br />
