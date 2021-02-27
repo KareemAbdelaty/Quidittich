@@ -220,7 +220,7 @@ MonoBehaviour:
   zmax: 0
   zmin: 0
   startx: 0
-  starty: 0
+  starty: 50
   startz: 0
   rb: {fileID: 0}
   thrust: 10

@@ -19,7 +19,7 @@ public class WizardBehavior : MonoBehaviour
     public int rechargeRate;
     public bool unconscious;
     public bool mindControlling;
-    public bool mindcontrol;
+    public int mindcontrol;
     public GameObject knockOutby;
     public int xmax;
     public int xmin;
@@ -96,14 +96,12 @@ public class WizardBehavior : MonoBehaviour
         Debug.Log(team + " wizard " + id + " is knocked out");
         rb.velocity = Vector3.zero;
         Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
-        m.knockouts++;
         System.Random rng = new System.Random();
         int n = rng.Next(0, 100);
         if(n <= invulnerability)
         {
             Debug.Log(team + " wizard " + id + " is INVULNERABLE");
             currentExhaustion += 10;
-            m.knockouts--;
             return;
         }
         n = rng.Next(0, 100);
@@ -120,7 +118,6 @@ public class WizardBehavior : MonoBehaviour
                     {
                         continue;
                     }
-                    m.slythrin[i].currentExhaustion = 0;
                     m.slythrin[i].maxVelocity += maxVelocity;
                     m.slythrin[i].maxExhaustion += maxExhaustion;
                     m.slythrin[i].aggresiveness += aggresiveness;
@@ -134,7 +131,6 @@ public class WizardBehavior : MonoBehaviour
                     {
                         continue;
                     }
-                    m.griffindor[i].currentExhaustion = 0;
                     m.griffindor[i].maxVelocity += maxVelocity;
                     m.griffindor[i].maxExhaustion += maxExhaustion;
                     m.griffindor[i].aggresiveness += aggresiveness;
@@ -144,10 +140,11 @@ public class WizardBehavior : MonoBehaviour
         n = rng.Next(0, 100);
         if (n < mindcontrol)
         {
-            m.mindControlls++;
+            m.mindcontrolls++;
             WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
             mindControlling = true;
-            if (knockOutby.team == "slythrin")
+            Debug.Log(w.team + " wizard " + id + "'s mind has been hexed");
+            if (w.team == "slythrin")
             {
                 w.team = "griffindor";
                 MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
@@ -162,6 +159,7 @@ public class WizardBehavior : MonoBehaviour
         }
         unconscious = true;
         rb.useGravity = true;
+        m.knockouts++;
 
 
     }
@@ -169,10 +167,8 @@ public class WizardBehavior : MonoBehaviour
     {
 
         unconscious = false;
-        currentExhaustion = 0;
         Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
         initForce();
-        m.knockouts--:
         Debug.Log(team + " wizard " + id + " is back in the game");
         if (sharingPower)
         {
@@ -210,12 +206,13 @@ public class WizardBehavior : MonoBehaviour
         }
         if (mindControlling == true)
         {
-            m.mindControlls--;
+            m.mindcontrolls--;
             WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
             mindControlling = false ;
-            if (knockOutby.team == "slythrin")
+            if (w.team == "slythrin")
             {
                 w.team = "griffindor";
+                Debug.Log(w.team + " wizard " + id + "'s mind is now free ");
                 MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
                 me.material = Resources.Load("WizardRed", typeof(Material)) as Material;
             }
@@ -232,17 +229,22 @@ public class WizardBehavior : MonoBehaviour
     IEnumerator wakeup()
     {
         rb.useGravity = false;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(20);
         onWakeup();
     }
     void recharging()
     {
-        currentExhaustion--;
+        timer++;
+        if (timer == 10000)
+        {
+            currentExhaustion--;
+            timer = 0;
+        }
     }
     public void initForce()
     {
         timer++;
-        if (timer == 50)
+        if (timer == 10000)
         {
             currentExhaustion++;
             timer = 0;
@@ -274,7 +276,7 @@ public class WizardBehavior : MonoBehaviour
     public void generateForce()
     {
         timer++;
-        if(timer == 50)
+        if(timer == 10000)
         {
             currentExhaustion++;
             timer = 0;
@@ -309,8 +311,6 @@ public class WizardBehavior : MonoBehaviour
     {
         if (collision.gameObject.tag == "Land")
         {
-            if (!unconscious)
-            {
                 unconscious = true;
                 if (team == "griffindor")
                 {
@@ -322,7 +322,7 @@ public class WizardBehavior : MonoBehaviour
                     transform.position = new Vector3(Random.Range(xmin, xmax), 500, -490);
                     StartCoroutine(wakeup());
                 }
-            }
+            
         }
         if (collision.gameObject.tag == "wizard")
         {
@@ -340,7 +340,7 @@ public class WizardBehavior : MonoBehaviour
                 else
                 {
                     w.onKnockOut();
-                    w.knockOutby = this;
+                    w.knockOutby = gameObject;
                 }
             }
             else

@@ -201,7 +201,7 @@ public class Main : MonoBehaviour
             b.invulnerability = rand.Next(0, 5);
             b.teamRage = rand.Next(0, 10);
             b.rechargeRate = 3;
-            b.mindControl = rand.Next(0, 8);
+            b.mindcontrol = rand.Next(0, 8);
             b.unconscious = false;
             b.xmax = xmax;
             b.xmin = xmin;
@@ -234,7 +234,7 @@ public class Main : MonoBehaviour
             b.invulnerability = rand.Next(0, 10);
             b.teamRage = rand.Next(0, 10);
             b.rechargeRate = 1;
-            b.mindControl = rand.Next(0, 15);
+            b.mindcontrol = rand.Next(0, 15);
             b.unconscious = false;
             b.xmax = xmax;
             b.xmin = xmin;
@@ -273,9 +273,9 @@ public class Main : MonoBehaviour
                 string e = "current mind controlls " + mindcontrolls;
                 GUI.Label(new Rect(10, 10, 120, 20), a);
                 GUI.Label(new Rect(Screen.width - 200, 10, 120, 20), b);
-                GUI.Label(new Rect(10, 50, 120, 20), c);
-                GUI.Label(new Rect(Screen.width - 200, 50, 120, 20), d);
-                GUI.Label(new Rect(10, 90, 120, 20), e);
+                GUI.Label(new Rect(10, 50, 120, 40), c);
+                GUI.Label(new Rect(Screen.width - 200, 50, 120, 40), d);
+                GUI.Label(new Rect(10, 90, 120, 40), e);
                 toggle = GUI.Toggle(new Rect(Screen.width / 2, 10, 100, 30), toggle, "Pause");
                 break;
             case views.griffindor:
