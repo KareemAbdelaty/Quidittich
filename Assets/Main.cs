@@ -58,7 +58,10 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //check if endgame
+        if(Score == GoalLimit)
+        {
+            endgame();
+        }
     }
 
     void endgame() { 

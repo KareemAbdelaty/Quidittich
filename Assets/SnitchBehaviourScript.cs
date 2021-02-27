@@ -14,6 +14,9 @@ public class SnitchBehaviourScript : MonoBehaviour
     public int ymin;
     public int zmax;
     public int zmin;
+    public int startx;
+    public int starty;
+    public int startz;
     public Rigidbody rb;
     public float thrust;
     private bool upward; 
@@ -71,6 +74,13 @@ public class SnitchBehaviourScript : MonoBehaviour
             Vector3 vec3 = new Vector3(0, 50, 0);
             rb.AddForce(vec3, ForceMode.Force);
             upward = true;
+        }
+        if(collision.gameObject.tag == "wizard")
+        {
+            Vector3 vec3 = new Vector3(startx, starty, startz);
+            transform.position = vec3;
+            Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+            m.Score++;
         }
     }
 }
