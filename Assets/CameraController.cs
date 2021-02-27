@@ -27,7 +27,6 @@ public class CameraController : MonoBehaviour
         transform.localPosition = Vec;
         yaw += speedH * Input.GetAxis("Mouse X");
         pitch -= speedV * Input.GetAxis("Mouse Y");
-
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 }
