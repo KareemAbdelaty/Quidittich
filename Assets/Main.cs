@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    public int Score = 0;
+    public int slythrinScore = 0;
+    public int griffindorScore = 0;
     public int TeamSize= 20;
     public int GoalLimit = 100;
     public int griffindorStartpostion;
@@ -16,6 +17,7 @@ public class Main : MonoBehaviour
     public GameObject[] slythrin;
     System.Random rand;
     public float snitchThrust;
+    public float wizardThrust;
     public int xmax;
     public int xmin;
     public int ymax;
@@ -28,7 +30,7 @@ public class Main : MonoBehaviour
         xmin = -500;
         xmax = 500;
         ymin = 0;
-        ymax = 1000;
+        ymax = 200;
         zmin = -500;
         zmax = 500;
         rand = new System.Random();
@@ -47,10 +49,14 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Score == GoalLimit)
+        if(slythrinScore >= GoalLimit)
         {
             turnOff();
-            endgame();
+            slythrinWin();
+        }else if(griffindorScore >= GoalLimit)
+        {
+            turnOff();
+            griffindorWin();
         }
     }
 
@@ -128,10 +134,12 @@ public class Main : MonoBehaviour
             b.xmin = xmin;
             b.ymax = ymax;
             b.ymin = ymin;
+            b.thrust = wizardThrust;
             b.zmax = zmax;
             b.zmin = zmin;
+            b.rb = rb;
             rb.useGravity = false;
-            rb.mass = b.weight / 100;
+            rb.mass = b.weight;
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, griffindorStartpostion);
             MeshRenderer m = w.GetComponent<MeshRenderer>();
             m.material = Resources.Load("WizardRed", typeof(Material)) as Material;
@@ -159,12 +167,27 @@ public class Main : MonoBehaviour
             b.ymin = ymin;
             b.zmax = zmax;
             b.zmin = zmin;
+            b.thrust = wizardThrust;
+            b.rb = rb;
             rb.useGravity = false;
-            rb.mass = b.weight / 100;
+            rb.mass = b.weight;
             w.transform.position = new Vector3(Random.Range(xmin, xmax), 10, slythrinStartpostion);
             MeshRenderer m = w.GetComponent<MeshRenderer>();
             m.material = Resources.Load("WizardGreen", typeof(Material)) as Material; 
             slythrin[i] = w;
         }
+    }
+    public void slythrinWin()
+    {
+
+    }
+    public void griffindorWin()
+    {
+
+    }
+    void OnGUI()
+    {
+        GUI.Label(new Rect(10, 10, 100, 20), "Griffindor Score" + griffindorScore);
+        GUI.Label(new Rect(150, 10, 100, 20), "Slythrin Score" + slythrinScore);
     }
 }

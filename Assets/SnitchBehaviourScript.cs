@@ -33,7 +33,7 @@ public class SnitchBehaviourScript : MonoBehaviour
     {
     }
     void FixedUpdate() { 
-        Vector3 currentpos = GameObject.FindGameObjectWithTag("snitch").transform.position;
+        Vector3 currentpos = transform.position;
         if ((currentpos.x - 5 <= randomx)&&(randomx <= currentpos.x + 5)&& (currentpos.y - 5 <= randomy) && (randomy <= currentpos.y+ 5)&&( currentpos.z - 5 <= randomz)&&(randomx <= currentpos.x + 5))
         {
             generateNewCoordinates();
@@ -56,7 +56,7 @@ public class SnitchBehaviourScript : MonoBehaviour
     public void generateForce()
     {
         Vector3 vec2 = new Vector3(randomx, randomy, randomz);
-        vec = (vec2 - GameObject.FindGameObjectWithTag("snitch").transform.position).normalized;
+        vec = (vec2 - transform.position).normalized;
         opposite = new Vector3(-vec.x, -vec.y, -vec.z);
         rb.AddForce(vec * thrust, ForceMode.Force);
     }
@@ -75,10 +75,21 @@ public class SnitchBehaviourScript : MonoBehaviour
         }
         if(collision.gameObject.tag == "wizard")
         {
-            Vector3 vec3 = new Vector3(startx, starty, startz);
-            transform.position = vec3;
-            Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
-            m.Score++;
+            WizardBehavior w = collision.gameObject.GetComponent<WizardBehavior>();
+            if (w.team== "slythrin")
+            {
+                Vector3 vec3 = new Vector3(startx, starty, startz);
+                transform.position = vec3;
+                Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+                m.slythrinScore++;
+            }
+            else
+            {
+                Vector3 vec3 = new Vector3(startx, starty, startz);
+                transform.position = vec3;
+                Main m = GameObject.FindGameObjectWithTag("main").GetComponent<Main>();
+                m.griffindorScore++;
+            }
         }
     }
 }
