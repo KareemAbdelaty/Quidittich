@@ -106,6 +106,10 @@ public class Main : MonoBehaviour
                      System.Math.Sin(2.0 * System.Math.PI * u2); 
         double randNormal =
                      m + u * randStdNormal;
+        if (randNormal < 0)
+        {
+            randNormal = -randNormal;
+        }
         return randNormal;
     }
     public void turnON()
@@ -263,7 +267,9 @@ public class Main : MonoBehaviour
     }
     void OnGUI()
     {
-        switch(view)
+        GUIStyle guiStyle = new GUIStyle();
+        guiStyle.fontSize = 20;
+        switch (view)
         {
             case views.ingame:
                 string a = "Griffindor Score " + griffindorScore;
@@ -279,14 +285,15 @@ public class Main : MonoBehaviour
                 toggle = GUI.Toggle(new Rect(Screen.width / 2, 10, 100, 30), toggle, "Pause");
                 break;
             case views.griffindor:
-                GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 500, 500), "Griffindor Win");
+
+                GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 500, 500), "Griffindor Win",guiStyle);
                 if (GUI.Button(new Rect(Screen.width/2, Screen.height- 40, 50, 30), "Restart"))
                 {
                     restart();
                 }                   
                 break;
             case views.slythrin:
-                GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 500, 500), "Slythrin win");
+                GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 500, 500), "Slythrin win",guiStyle);
                 if (GUI.Button(new Rect(Screen.width / 2, Screen.height - 40, 50, 30), "Restart"))
                 {
                     restart();

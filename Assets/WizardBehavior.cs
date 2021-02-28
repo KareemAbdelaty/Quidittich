@@ -111,7 +111,6 @@ public class WizardBehavior : MonoBehaviour
                         continue;
                     }
                     m.slythrin[i].maxVelocity += maxVelocity;
-                    m.slythrin[i].maxExhaustion += maxExhaustion;
                     m.slythrin[i].aggresiveness += aggresiveness;
                 }
             }
@@ -124,28 +123,30 @@ public class WizardBehavior : MonoBehaviour
                         continue;
                     }
                     m.griffindor[i].maxVelocity += maxVelocity;
-                    m.griffindor[i].maxExhaustion += maxExhaustion;
                     m.griffindor[i].aggresiveness += aggresiveness;
                 }
             }
         }
-        WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
-        if (w.mindcontrol < mindcontrol)
+        if (knockOutby != null)
         {
-            m.mindcontrolls++;
-            mindControlling = true;
-            Debug.Log(w.team + " wizard " + id + "'s mind has been hexed");
-            if (w.team == "slythrin")
+            WizardBehavior w = knockOutby.GetComponent<WizardBehavior>();
+            if (w.mindcontrol < mindcontrol)
             {
-                w.team = "griffindor";
-                MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
-                me.material = Resources.Load("WizardRed", typeof(Material)) as Material;
-            }
-            else
-            {
-                w.team = "slythrin";
-                MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
-                me.material = Resources.Load("WizardGreen", typeof(Material)) as Material;
+                m.mindcontrolls++;
+                mindControlling = true;
+                Debug.Log(w.team + " wizard " + id + "'s mind has been hexed");
+                if (w.team == "slythrin")
+                {
+                    w.team = "griffindor";
+                    MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
+                    me.material = Resources.Load("WizardRed", typeof(Material)) as Material;
+                }
+                else
+                {
+                    w.team = "slythrin";
+                    MeshRenderer me = knockOutby.GetComponent<MeshRenderer>();
+                    me.material = Resources.Load("WizardGreen", typeof(Material)) as Material;
+                }
             }
         }
         unconscious = true;
@@ -174,9 +175,15 @@ public class WizardBehavior : MonoBehaviour
                     {
                         continue;
                     }
-                    m.slythrin[i].maxVelocity -= maxVelocity;
-                    m.slythrin[i].maxExhaustion -= maxExhaustion;
-                    m.slythrin[i].aggresiveness -= aggresiveness;
+                    if(m.slythrin[i].maxVelocity - maxVelocity > 0)
+                    {
+                        m.slythrin[i].maxVelocity -= maxVelocity;
+                    }
+                    if (m.slythrin[i].aggresiveness - aggresiveness > 0)
+                    {
+                        m.slythrin[i].aggresiveness -= aggresiveness; 
+                    }
+
                 }
             }
             else
@@ -185,13 +192,20 @@ public class WizardBehavior : MonoBehaviour
                 {
                     if (m.griffindor[i].id == id)
                     {
+                        Debug.Log("Passed");
                         continue;
                     }
-                    Debug.Log(team + " is now calmer");
-                    m.griffindor[i].maxVelocity -= maxVelocity;
-                    m.griffindor[i].maxExhaustion -= maxExhaustion;
-                    m.griffindor[i].aggresiveness -= aggresiveness;
+                    if (m.griffindor[i].maxVelocity - maxVelocity > 0)
+                    {
+                        m.griffindor[i].maxVelocity -= maxVelocity; 
+                    }
+                    if (m.griffindor[i].aggresiveness - aggresiveness > 0)
+                    {
+                        m.griffindor[i].aggresiveness -= aggresiveness;
+                    }
+                    
                 }
+                Debug.Log(team + " is now calmer");
             }
 
         }
@@ -225,12 +239,10 @@ public class WizardBehavior : MonoBehaviour
     }
     void recharging()
     {
-        timer++;
-        if (timer == 1000)
-        {
-            currentExhaustion--;
-            timer = 0;
-        }
+
+       currentExhaustion--;
+
+        
     }
     public void initForce()
     {

@@ -25,10 +25,10 @@ public class CameraController : MonoBehaviour
         Vec.x += Input.GetAxis("Horizontal") * Time.deltaTime * 40;
         Vec.z += Input.GetAxis("Vertical") * Time.deltaTime * 40;
         transform.localPosition = Vec;
+        yaw += speedH * Input.GetAxis("Mouse X");
+        pitch -= speedV * Input.GetAxis("Mouse Y");
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            yaw += speedH * Input.GetAxis("Mouse X");
-            pitch -= speedV * Input.GetAxis("Mouse Y");
             transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
         }
     }
