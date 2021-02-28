@@ -27,8 +27,13 @@ During the game, the snitch will choose a random point inside the stadium and st
 
 Not all wizards are created equal. Wizards have a wide range of traits that affect how they preform in game. Here is a list of these traits:<br /><br />
 Flying Ability: some wizards are more confident in their flying abilities than their peers. This allows them to reach a higher maximum velocity.<br />
+
 Mind Control and Resistance: some wizards are skilled in mind magic. Them allows them to trick enemies that come close enough into helping them or to resist getting their mind controlled. All wizards can shake off mind control after a while.<br />
+
 Invlunerablility : Some wizards are able to avoid getting knocked out by making themselves invulnerable. This is hard to do so they are not always successful<br />
+
+Powershare: If the wizard is knocked out there is a chance that the wizard will share his power with the rest of his team. Team mates return to normal when the wizard respawns<br />
+
 Fitness: Flying is hard,as such wizards can get tired after flying for a long time. If a wizard is tired they will levitate in place to rest<br />
 **Wizard Behaviour**<br />
 During the game each wizard will look for the snitch and then start flying after it in order catch it while also trying to avoid colliding with the other wizards or the ground. . Although wizards try their best to not collide with each other or with the ground, sometimes collsions are inevitable. If a wizard collides with the ground they are knocked out for 20 seconds. When they wake up they have to make their way to their team's starting postion before they can rejoin the game. If a wizard collides with a wizard from another team the more aggressive wizard will knock the other wizard out. After getting knocked out the wizard wont have the focus required to ignore gravity and will start falling down. Upon hitting the ground they will have to wait for 20seconds before rejoining the game from their teams starting position.
