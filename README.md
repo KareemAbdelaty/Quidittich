@@ -48,6 +48,12 @@ Most of the simulation run configurations can be chaned in setup object using th
 Live game commentary will be found in the Console Tab<br />
 ![Uploading image.png…]()
 
+## InSimulation UI
+**Simulation running screen**<br />
+![ingame](https://user-images.githubusercontent.com/69083495/109406386-36ad4800-7981-11eb-86d8-1f259e65db81.png)
+<br />
+**EndGame screen** <br />
+![Endgame](https://user-images.githubusercontent.com/69083495/109406395-4b89db80-7981-11eb-9cd2-380916c0f6e6.png)
 
 
 
@@ -78,7 +84,7 @@ Not all wizards are created equal. Wizards have a wide range of traits that affe
 <br />
 **Flying Ability**: some wizards are more confident in their flying abilities than their peers. This allows them to reach a higher maximum velocity.<br />
 
-**Mind Control and Resistance**: some wizards are skilled in mind magic. Them allows them to trick enemies that come close enough into helping them or to resist getting their mind controlled. All wizards can shake off mind control after a while.<br />
+**Mind Control and Resistance**: some wizards are skilled in mind magic. Them allows them to mind control enemies that collide with them or to resist getting their mind controlled. Mind Controlled wizards change their outfit to that of the opposing team and any snitches they catch will count for the opposing team .wizards can shake off mind control after a while.<br />
 
 **Invlunerablility** : Some wizards are able to avoid getting knocked out by making themselves invulnerable. This is hard to do so they are not always successful<br />
 
