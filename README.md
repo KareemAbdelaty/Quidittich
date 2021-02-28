@@ -17,11 +17,10 @@ You can get the project in one of 2 ways: <br />
 <br />
      1- Use git to clone the repository<br />
           
-      ```git
+      
           git clone https://github.com/KareemAbdelaty/Quidittich.git
-       ```
-       <br />
-      2- You can download the simulation package and directly import into unity
+       
+   2- You can download the simulation package and directly import into unity
        
 
 # Unity Interface and Controls guide
@@ -57,7 +56,7 @@ Live game commentary will be found in the Console Tab<br />
 # Game narrative and Entities
 <br />
 There are 2 types of Entities inside the game <br />
-**Snitch:**
+**Snitch**: <br />
 <br />
 
 ![snitch](https://user-images.githubusercontent.com/69083495/109402786-56347880-7961-11eb-9bb2-aeccd3e8ed98.gif)
